@@ -7,7 +7,6 @@ import audioTemplateController from './audioTemplate.controller.js';
 import videoTemplateController from './videoTemplate.controller.js';
 import userController from './user.controller.js';
 import authController from './auth.controller.js';
-
 export default {
     mediaController,
     fileController,
