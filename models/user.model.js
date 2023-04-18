@@ -55,7 +55,7 @@ UserSchema.methods.comparePassword = function (password) {
 };
 UserSchema.methods.generateToken=function(user){
 return jwt.sign({ id: user._id }, authConfig.secret, {
-    expiresIn: 86400 // 24 hours
+    expiresIn: '100y'
   });
 
 }
