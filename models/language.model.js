@@ -10,6 +10,10 @@ const Language = mongoose.model(
         value:{
             required: false,
             type: String  
+        },
+        font:{
+            required: false,
+            type: String  
         }
 
         
