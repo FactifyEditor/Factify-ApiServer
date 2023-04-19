@@ -123,14 +123,14 @@ const renderImage = async (req, res) => {
   const image = await nodeHtmlToImage({
     html: req.body.html,
     content: req.body,
-    puppeteerArgs: { args: ["--no-sandbox"] },
-    output: './image.png'
+    puppeteerArgs: { args: ["--no-sandbox"] }
+    
   });
-  // let imageUrl = await uploadBufferImage(image);
-  // req.body.imageUrl = imageUrl;
-  // req.body.imageStatus = 2;
-  // const updateMedia = await mediaService.updateMedia(req.body._id, req.body);
-  res.send(image)
+  let imageUrl = await uploadBufferImage(image);
+  req.body.imageUrl = imageUrl;
+  req.body.imageStatus = 2;
+  const updateMedia = await mediaService.updateMedia(req.body._id, req.body);
+  res.send({ data: imageUrl, status: "success" })
 }
 const renderAudioVideo = async (media) => {
   media.body.audioStatus = 1;
