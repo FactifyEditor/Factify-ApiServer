@@ -18,7 +18,11 @@ const { mediaService } = service
 
 const getAllMedias = async (req, res) => {
   try {
-    const medias = await mediaService.getAllMedias();
+    //get request parameter
+
+    const filter= req.query
+    console.log(filter);
+    const medias = await mediaService.getAllMedias(filter);
     res.json({ data: medias, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });
