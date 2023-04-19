@@ -7,7 +7,10 @@ const Media = mongoose.model(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Language'
     },
-    link: String,
+    link: {
+      type:String,
+      default:""
+     },
     rating: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Rating'
@@ -50,6 +53,10 @@ const Media = mongoose.model(
      videoUrl:{
       type:String,
       default:""
+     },
+     draft:{
+      type:Boolean,
+      default:false
      },
     created: {type: Date, default: Date.now}
   })
