@@ -166,6 +166,7 @@ const getMediaById = async (req, res) => {
 const updateMedia = async (req, res) => {
   try {
     const media = await mediaService.updateMedia(req.params.id, req.body);
+    renderAudioVideo({body:media});
     res.json({ data: media, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });
