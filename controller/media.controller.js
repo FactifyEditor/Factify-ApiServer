@@ -174,7 +174,8 @@ const updateMedia = async (req, res) => {
 };
 const deleteMedia = async (req, res) => {
   try {
-    const media = await mediaService.deleteMedia(req.params.id);
+    const { ids } = req.body;
+    const media = await mediaService.deleteMedia(ids);
     res.json({ data: media, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });

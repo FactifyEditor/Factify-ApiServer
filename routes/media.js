@@ -16,7 +16,8 @@ const {
 
 const router = express.Router();
 router.route("/").get(getAllMedias).post(tokenValidator.verifyToken,createMedia);
-router.route("/:id").get(getMediaById).put(updateMedia).delete(deleteMedia);
+router.route("/:id").get(getMediaById).put(updateMedia)
+router.delete("/", deleteMedia);
 router.route("/render-video").post(renderVideo);
 router.route("/render-audio").post(renderAudio);
 router.route("/render-image").post(renderImage);

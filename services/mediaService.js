@@ -22,8 +22,8 @@ const updateMedia = async (id, media) => {
  return await mediaModel.findByIdAndUpdate(id, {$set: media});
 }
 ;
-const deleteMedia = async (id) => {
-  return await mediaModel.findByIdAndDelete(id);
+const deleteMedia = async (idsToDelete) => {
+  return await mediaModel.deleteMany({ _id: { $in: idsToDelete }});
 };
 export default {
     getAllMedias,
