@@ -18,8 +18,10 @@ const getMediaById = async (id) => {
 //   return await mediaModel.findByIdAndUpdate(id, {$set: media});
 // };
 const updateMedia = async (id, media) => {
-  return await mediaModel.findByIdAndUpdate(id, {$set: media});
-};
+ // update media in mongodb
+ return await mediaModel.findByIdAndUpdate(id, {$set: media});
+}
+;
 const deleteMedia = async (id) => {
   return await mediaModel.findByIdAndDelete(id);
 };
