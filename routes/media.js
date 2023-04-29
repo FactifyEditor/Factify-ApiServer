@@ -11,7 +11,8 @@ const {
     renderVideo,
     renderAudio,
     renderImage,
-    convertTTSToAudio
+    convertTTSToAudio,
+    renderAll
   } = mediaController
 
 const router = express.Router();
@@ -22,4 +23,5 @@ router.route("/render-video").post(renderVideo);
 router.route("/render-audio").post(renderAudio);
 router.route("/render-image").post(renderImage);
 router.route("/ttsToAudio").post(convertTTSToAudio);
+router.route("/render-all").post(renderAll);
 export default  router;

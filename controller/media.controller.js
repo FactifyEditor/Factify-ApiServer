@@ -20,7 +20,7 @@ const getAllMedias = async (req, res) => {
   try {
     //get request parameter
 
-    const filter= req.query
+    const filter = req.query
     console.log(filter);
     const medias = await mediaService.getAllMedias(filter);
     res.json({ data: medias, status: "success" });
@@ -132,10 +132,23 @@ const renderImage = async (req, res) => {
   const updateMedia = await mediaService.updateMedia(req.body._id, { imageStatus: 2, imageUrl: imageUrl });
   res.send({ data: imageUrl, status: "success" })
 }
+const _renderImage = async (req, res) => {
+  const image = await nodeHtmlToImage({
+    html: req.body.html,
+    content: req.body,
+    puppeteerArgs: { args: ["--no-sandbox"] }
+
+  });
+  let imageUrl = await uploadBufferImage(image);
+  req.body.imageUrl = imageUrl;
+  req.body.imageStatus = 2;
+  const updateMedia = await mediaService.updateMedia(req.body._id, { imageStatus: 2, imageUrl: imageUrl });
+  return true
+}
 const renderAudioVideo = async (media) => {
   media.body.audioStatus = 1;
   media.body.videoStatus = 1;
-  await mediaService.updateMedia(media.body._id, {audioStatus:1,videoStatus:1});
+  await mediaService.updateMedia(media.body._id, { audioStatus: 1, videoStatus: 1 });
   await _renderAudio(media);
   await _renderVideo(media);
   return true;
@@ -146,7 +159,7 @@ const createMedia = async (req, res) => {
     req.body.creator = creatorId;
     console.log(creatorId)
     const media = await mediaService.createMedia(req.body);
-    renderAudioVideo({body:media});
+    renderAudioVideo({ body: media });
     res.json({ data: media, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -160,12 +173,23 @@ const getMediaById = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+const renderAll = async (req, res) => {
+  try {
+    await _renderImage(req.body);
+    await _renderAudioVideo(req.body);
+    res.json({ data: req.body, status: "success" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+
+}
 const updateMedia = async (req, res) => {
   try {
-    
+
     const media = await mediaService.updateMedia(req.params.id, req.body);
-    req.body._id=req.params.id;
-    renderAudioVideo({body:req.body});
+    req.body._id = req.params.id;
+    renderAudioVideo({ body: req.body });
     res.json({ data: media, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -191,5 +215,6 @@ export default {
   renderAudio,
   convertTTSToAudio,
   renderImage,
-  renderAudioVideo
+  renderAudioVideo,
+  renderAll
 }
