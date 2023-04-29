@@ -20,7 +20,7 @@ const getAllMedias = async (req, res) => {
   try {
     //get request parameter
 
-    const filter= req.query
+    const filter = req.query
     console.log(filter);
     const medias = await mediaService.getAllMedias(filter);
     res.json({ data: medias, status: "success" });
@@ -36,7 +36,7 @@ const convertTTSToAudio = async (req, res) => {
 }
 const renderVideo = async (req, res) => {
   req.body.videoStatus = 1;
-  await mediaService.updateMedia(req.body._id, req.body);
+  await mediaService.updateMedia(req.body._id, { videoStatus: 1 });
   let response = await axios({
     method: 'post',
     url: `${RENDERER_SERVER}/render`,
@@ -44,7 +44,7 @@ const renderVideo = async (req, res) => {
   });
   req.body.videoUrl = response.data.url;
   req.body.videoStatus = 2;
-  const updateMedia = await mediaService.updateMedia(req.body._id, req.body);
+  const updateMedia = await mediaService.updateMedia(req.body._id, { videoUrl: response.data.url, videoStatus: 2 });
   const media = await mediaService.getMediaById(req.body._id);
   if (media.audioStatus == 2) {
     response = await axios({
@@ -57,7 +57,7 @@ const renderVideo = async (req, res) => {
     });
     req.body.videoUrl = response.data.url;
     req.body.videoStatus = 2;
-    const updateMedia = await mediaService.updateMedia(req.body._id, req.body);
+    const updateMedia = await mediaService.updateMedia(req.body._id, { videoUrl: response.data.url, videoStatus: 2 });
     res.send({ data: req.body.videoUrl = response.data.url, status: "success" })
   }
   else {
@@ -66,7 +66,7 @@ const renderVideo = async (req, res) => {
 }
 const _renderVideo = async (req) => {
   req.body.videoStatus = 1;
-  await mediaService.updateMedia(req.body._id, req.body);
+  await mediaService.updateMedia(req.body._id, { videoStatus: 1 });
   let response = await axios({
     method: 'post',
     url: `${RENDERER_SERVER}/render`,
@@ -74,9 +74,9 @@ const _renderVideo = async (req) => {
   });
   req.body.videoUrl = response.data.url;
   req.body.videoStatus = 2;
-  const updateMedia = await mediaService.updateMedia(req.body._id, req.body);
+  const updateMedia = await mediaService.updateMedia(req.body._id, { videoUrl: response.data.url, videoStatus: 2 });
   const media = await mediaService.getMediaById(req.body._id);
-  if (media.audioStatus == 2) {
+  if (req.body.audioStatus == 2) {
     response = await axios({
       method: 'post',
       url: `${RENDERER_SERVER}/merge-audio-video`,
@@ -87,7 +87,7 @@ const _renderVideo = async (req) => {
     });
     req.body.videoUrl = response.data.url;
     req.body.videoStatus = 2;
-    const updateMedia = await mediaService.updateMedia(req.body._id, req.body);
+    const updateMedia = await mediaService.updateMedia(req.body._id, { videoUrl: response.data.url, videoStatus: 2 });
     return true
     // res.send({ data: req.body.videoUrl = response.data.url, status: "success" })
   }
@@ -98,7 +98,7 @@ const _renderVideo = async (req) => {
 }
 const renderAudio = async (req, res) => {
   req.body.audioStatus = 1;
-  await mediaService.updateMedia(req.body._id, req.body);
+  await mediaService.updateMedia(req.body._id, { audioStatus: 1 });
   let response = await axios({
     method: 'post',
     url: `${RENDERER_SERVER}/render-audio`,
@@ -106,12 +106,12 @@ const renderAudio = async (req, res) => {
   });
   req.body.audioUrl = response.data.url;
   req.body.audioStatus = 2;
-  const updateMedia = await mediaService.updateMedia(req.body._id, req.body);
+  const updateMedia = await mediaService.updateMedia(req.body._id, { audioStatus: 2, audioUrl: response.data.url });
   res.send({ data: req.body.audioUrl, status: "success" })
 }
 const _renderAudio = async (req) => {
   req.body.audioStatus = 1;
-  await mediaService.updateMedia(req.body._id, req.body);
+  await mediaService.updateMedia(req.body._id, { audioStatus: 1 });
   let response = await axios({
     method: 'post',
     url: `${RENDERER_SERVER}/render-audio`,
@@ -119,7 +119,7 @@ const _renderAudio = async (req) => {
   });
   req.body.audioUrl = response.data.url;
   req.body.audioStatus = 2;
-  const updateMedia = await mediaService.updateMedia(req.body._id, req.body);
+  const updateMedia = await mediaService.updateMedia(req.body._id, { audioStatus: 2, audioUrl: response.data.url });
   return true
   // res.send({ data: req.body.audioUrl, status: "success" })
 }
@@ -128,12 +128,12 @@ const renderImage = async (req, res) => {
     html: req.body.html,
     content: req.body,
     puppeteerArgs: { args: ["--no-sandbox"] }
-    
+
   });
   let imageUrl = await uploadBufferImage(image);
   req.body.imageUrl = imageUrl;
   req.body.imageStatus = 2;
-  const updateMedia = await mediaService.updateMedia(req.body._id, req.body);
+  const updateMedia = await mediaService.updateMedia(req.body._id, { imageStatus: 2, imageUrl: imageUrl });
   res.send({ data: imageUrl, status: "success" })
 }
 const renderAudioVideo = async (media) => {
@@ -149,7 +149,7 @@ const createMedia = async (req, res) => {
     req.body.creator = creatorId;
     console.log(creatorId)
     const media = await mediaService.createMedia(req.body);
-    renderAudioVideo({body:media});
+    renderAudioVideo({ body: media });
     res.json({ data: media, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -166,7 +166,7 @@ const getMediaById = async (req, res) => {
 const updateMedia = async (req, res) => {
   try {
     const media = await mediaService.updateMedia(req.params.id, req.body);
-    renderAudioVideo({body:req.body});
+    renderAudioVideo({ body: req.body });
     res.json({ data: media, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });
