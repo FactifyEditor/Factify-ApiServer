@@ -65,8 +65,6 @@ const renderVideo = async (req, res) => {
   }
 }
 const _renderVideo = async (req) => {
-  req.body.videoStatus = 1;
-  await mediaService.updateMedia(req.body._id, req.body);
   let response = await axios({
     method: 'post',
     url: `${RENDERER_SERVER}/render`,
@@ -76,13 +74,13 @@ const _renderVideo = async (req) => {
   req.body.videoStatus = 2;
   const updateMedia = await mediaService.updateMedia(req.body._id, req.body);
   const media = await mediaService.getMediaById(req.body._id);
-  if (media.audioStatus == 2) {
+  if (req.body.audioStatus == 2) {
     response = await axios({
       method: 'post',
       url: `${RENDERER_SERVER}/merge-audio-video`,
       data: {
-        audioUrl: media.audioUrl,
-        videoUrl: media.videoUrl
+        audioUrl: req.body.audioUrl,
+        videoUrl: req.body.videoUrl
       }
     });
     req.body.videoUrl = response.data.url;
@@ -110,8 +108,6 @@ const renderAudio = async (req, res) => {
   res.send({ data: req.body.audioUrl, status: "success" })
 }
 const _renderAudio = async (req) => {
-  req.body.audioStatus = 1;
-  await mediaService.updateMedia(req.body._id, req.body);
   let response = await axios({
     method: 'post',
     url: `${RENDERER_SERVER}/render-audio`,
@@ -139,6 +135,7 @@ const renderImage = async (req, res) => {
 const renderAudioVideo = async (media) => {
   media.body.audioStatus = 1;
   media.body.videoStatus = 1;
+  await mediaService.updateMedia(media.body._id, {audioStatus:1,videoStatus:1});
   await _renderAudio(media);
   await _renderVideo(media);
   return true;
