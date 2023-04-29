@@ -162,7 +162,9 @@ const getMediaById = async (req, res) => {
 };
 const updateMedia = async (req, res) => {
   try {
+    
     const media = await mediaService.updateMedia(req.params.id, req.body);
+    req.body._id=req.params.id;
     renderAudioVideo({body:req.body});
     res.json({ data: media, status: "success" });
   } catch (err) {
