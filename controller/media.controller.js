@@ -159,7 +159,7 @@ const createMedia = async (req, res) => {
     req.body.creator = creatorId;
     console.log(creatorId)
     const media = await mediaService.createMedia(req.body);
-    renderAudioVideo({ body: media });
+    // renderAudioVideo({ body: media });
     res.json({ data: media, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -189,7 +189,7 @@ const updateMedia = async (req, res) => {
 
     const media = await mediaService.updateMedia(req.params.id, req.body);
     req.body._id = req.params.id;
-    renderAudioVideo({ body: req.body });
+    // renderAudioVideo({ body: req.body });
     res.json({ data: media, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });
