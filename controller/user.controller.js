@@ -1,7 +1,6 @@
 import  service  from "./../services/index.js";
 const {userService} =service
 const getAllUsers = async (req, res) => {
-  
   try {
     console.log("getting userList")
     const users = await userService.getAllUsers();
