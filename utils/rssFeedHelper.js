@@ -1,4 +1,4 @@
-const generateRSSFeed = async (feeds) => {
+const generateRSSFeed =  (feeds) => {
     let items = feeds.map(feed => {
         return `<item>
                 <link>${feed.videoUrl}</link>
