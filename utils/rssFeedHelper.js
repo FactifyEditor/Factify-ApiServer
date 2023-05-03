@@ -12,7 +12,7 @@ const generateRSSFeed =  (feeds) => {
     <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
       <channel>
         <title>Factify</title>
-        <link>http://test.com/rss.xml</link>
+        <link>https://storage.googleapis.com/factify/rssfeed.xml</link>
         <description>Factify RSS Feed</description>
         <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
         <language>en</language>
