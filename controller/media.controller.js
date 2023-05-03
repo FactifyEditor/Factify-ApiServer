@@ -36,9 +36,9 @@ const publishMedia= async(req,res)=>{
     const media = await mediaService.publishMedia(ids);
     const allPublishedFeed= await mediaService.getAllMedias({isPublished:true});
     const rssFeed= generateRSSFeed(allPublishedFeed);
-    await uploadRSSXML(rssFeed);
+    let fedUrl=await uploadRSSXML(rssFeed);
     console.log(rssFeed);
-    res.json({ data: media, status: "success" });
+    res.json({ data: fedUrl, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
