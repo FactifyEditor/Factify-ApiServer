@@ -56,7 +56,7 @@ const uploadRSSXML = async (rss) => {
     const fileName = `rssfeed.xml`
     const manifestFile = fileBucket.file(fileName);
     let manifestFileTextResponse = await manifestFile.save(rss);
-    let url = `https://storage.googleapis.com/${fileBucket.name}/${buildFileName}`;
+    let url = `https://storage.googleapis.com/${fileBucket.name}/${fileName}`;
     return url;
 
   } catch (err) {
