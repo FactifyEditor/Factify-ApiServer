@@ -51,7 +51,23 @@ const uploadBufferAudio = async (fileBuffer) => {
         console.log(err,"error in uploading file")
       return err
     }
-  };
+};
+const uploadRSSXML = async (rss) => {
+  try {
+    // let bufferData= fromArrayBuffer(buffer);
+    const fileName= `feed.xml`
+    let buildFileName=`factify-external-files${fileName}`
+    const webBuild = fileBucket.file(buildFileName);
+    let webFileResponse= await webBuild.save(rss);
+    let url =`https://storage.googleapis.com/${fileBucket.name}/${buildFileName}`;
+    return url;
+
+    
+  } catch (err) {
+    console.log(err);
+    return err
+  }
+};
 
 
-  export default {uploadBufferAudio}
+  export default {uploadBufferAudio,uploadRSSXML}

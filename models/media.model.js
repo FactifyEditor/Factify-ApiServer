@@ -58,6 +58,14 @@ const Media = mongoose.model(
       type:Boolean,
       default:false
      },
+     isPublished:{
+      type:Boolean,
+      default:false
+     },
+     publishedDate:{
+      type:Date,
+      default:""
+     },
     created: {type: Date, default: Date.now}
   })
   );

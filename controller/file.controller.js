@@ -109,6 +109,7 @@ const uploadBufferImage = async (fileBuffer) => {
   }
 };
 
+
 export default{
   uploadMultipleFiles,
   uploadBufferImage

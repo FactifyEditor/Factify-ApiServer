@@ -1,12 +1,14 @@
 import service from "../services/index.js";
-import ttsHelper from "../utils/textToMp3Converter.js"
+import ttsHelper from "../utils/textToMp3Converter.js";
+import rssFeedHelper from '../utils/rssFeedHelper.js'
 import uploadHandler from "../utils/cloudHelper/gCloudHelper.js"
 import nodeHtmlToImage from 'node-html-to-image';
 import fileController from './file.controller.js'
 const { uploadBufferImage } = fileController;
 import axios from 'axios';
-const { uploadBufferAudio } = uploadHandler;
+const { uploadBufferAudio,uploadRSSXML } = uploadHandler;
 const { convertTextMp3 } = ttsHelper;
+const {generateRSSFeed} = rssFeedHelper
 import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 dotenv.config()
 
@@ -28,6 +30,19 @@ const getAllMedias = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+const publishMedia= async(req,res)=>{
+  try {
+    const { ids } = req.body;
+    const media = await mediaService.publishMedia(ids);
+    const allPublishedFeed= await mediaService.getAllMedias({isPublished:true});
+    const rssFeed= generateRSSFeed(allPublishedFeed);
+    await uploadRSSXML(rssFeed);
+    console.log(rssFeed);
+    res.json({ data: media, status: "success" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
 const convertTTSToAudio = async (req, res) => {
   let { audio, duration } = await convertTextMp3(req.body.ttsText, req.body.languageCode);
   console.log(audio, "audio file")
@@ -186,7 +201,6 @@ const renderAll = async (req, res) => {
 }
 const updateMedia = async (req, res) => {
   try {
-
     const media = await mediaService.updateMedia(req.params.id, req.body);
     req.body._id = req.params.id;
     // renderAudioVideo({ body: req.body });
@@ -216,5 +230,6 @@ export default {
   convertTTSToAudio,
   renderImage,
   renderAudioVideo,
-  renderAll
+  renderAll,
+  publishMedia
 }
