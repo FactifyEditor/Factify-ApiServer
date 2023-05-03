@@ -3,13 +3,13 @@ import {
   format
 } from "util";
 import path from 'path';
-import 
-  store
-from "@google-cloud/storage";
+import
+store
+  from "@google-cloud/storage";
 import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 dotenv.config()
-let bucketName=process.env.BUCKET_NAME;
-const {Storage}= store;
+let bucketName = process.env.BUCKET_NAME;
+const { Storage } = store;
 const storage = new Storage();
 const fileBucket = storage.bucket(bucketName);
 const makeId = (length) => {
@@ -22,47 +22,43 @@ const makeId = (length) => {
   }
   return result;
 };
-const fromArrayBuffer = function(array){
-	var buffer = new Buffer(array.byteLength);
-	var view = new Uint8Array(array);
+const fromArrayBuffer = function (array) {
+  var buffer = new Buffer(array.byteLength);
+  var view = new Uint8Array(array);
 
-	for (var i = 0; i < buffer.length; i++)
-	{
-		buffer[i] = view[i];
-	}
+  for (var i = 0; i < buffer.length; i++) {
+    buffer[i] = view[i];
+  }
 
-	return buffer;
+  return buffer;
 };
 const uploadBufferAudio = async (fileBuffer) => {
-    try {
-      const buffer=fileBuffer;
-      let bufferData= fromArrayBuffer(buffer);
-      const fileName= `${makeId(16)}.mp3`
-      let buildFileName=`factify-files/${fileName}`;
-      console.log(buildFileName);
-      const webBuild = fileBucket.file(buildFileName);
-      let webFileResponse= await webBuild.save(bufferData);
-      console.log(webFileResponse);
-      const url = `https://storage.googleapis.com/${fileBucket.name}/${buildFileName}`;
+  try {
+    const buffer = fileBuffer;
+    let bufferData = fromArrayBuffer(buffer);
+    const fileName = `${makeId(16)}.mp3`
+    let buildFileName = `factify-files/${fileName}`;
+    console.log(buildFileName);
+    const webBuild = fileBucket.file(buildFileName);
+    let webFileResponse = await webBuild.save(bufferData);
+    console.log(webFileResponse);
+    const url = `https://storage.googleapis.com/${fileBucket.name}/${buildFileName}`;
 
-     return url
-      
-    } catch (err) {
-        console.log(err,"error in uploading file")
-      return err
-    }
+    return url
+
+  } catch (err) {
+    console.log(err, "error in uploading file")
+    return err
+  }
 };
 const uploadRSSXML = async (rss) => {
   try {
-    // let bufferData= fromArrayBuffer(buffer);
-    const fileName= `feed.xml`
-    let buildFileName=`factify-external-files${fileName}`
-    const webBuild = fileBucket.file(buildFileName);
-    let webFileResponse= await webBuild.save(rss);
-    let url =`https://storage.googleapis.com/${fileBucket.name}/${buildFileName}`;
+    const fileName = `rssfeed.xml`
+    const manifestFile = fileBucket.file(fileName);
+    let manifestFileTextResponse = await manifestFile.save(rss);
+    let url = `https://storage.googleapis.com/${fileBucket.name}/${buildFileName}`;
     return url;
 
-    
   } catch (err) {
     console.log(err);
     return err
@@ -70,4 +66,4 @@ const uploadRSSXML = async (rss) => {
 };
 
 
-  export default {uploadBufferAudio,uploadRSSXML}
+export default { uploadBufferAudio, uploadRSSXML }
