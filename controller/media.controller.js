@@ -197,7 +197,7 @@ const getMediaById = async (req, res) => {
 
 const renderAll = async (req, res) => {
   try {
-    // await _renderImage(req);
+    await _renderImage(req);
     await renderAudioVideo(req);
     res.json({ data: req.body, status: "success" });
   } catch (err) {
