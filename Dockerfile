@@ -17,6 +17,7 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY package.json /usr/src/app/
 RUN npm install
+RUN npm install node-font2base64
 # ADD https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.2.0_amd64 /usr/bin/dumb-init
 # RUN chmod 0777 /usr/bin/dumb-init
 COPY . /usr/src/app
