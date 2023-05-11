@@ -1,5 +1,5 @@
 # FROM jrottenberg/ffmpeg:4.4-scratch AS ffmpeg
-FROM node:18-slim
+FROM node:18.12.1-alpine
 # COPY --from=ffmpeg / /
 # RUN apt-get update && apt-get install -y curl google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1
 # RUN apt-get update && apt-get install -y libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev libxi-dev libglu1-mesa-dev libglew-dev python2.7 python-pip xvfb
