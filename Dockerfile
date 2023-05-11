@@ -4,14 +4,6 @@ FROM node:18-slim
 # RUN apt-get update && apt-get install -y curl google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1
 # RUN apt-get update && apt-get install -y libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev libxi-dev libglu1-mesa-dev libglew-dev python2.7 python-pip xvfb
 RUN apt-get update &&  apt-get install -y libatk-bridge2.0-0
-# Install fontconfig
-RUN apt-get update && apt-get install -y fontconfig
-
-# Copy font files to system font directory
-COPY fonts/HindiFont.ttf /usr/share/fonts/truetype/ubuntu-font-family/HindiFont.ttf
-
-# Refresh system font cache
-RUN fc-cache -f -v
 RUN apt-get update \
     && apt-get install -y wget gnupg \
     && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
@@ -20,7 +12,8 @@ RUN apt-get update \
     && apt-get install -y google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1 \
       --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
-
+RUN apt update && apt install fonts-indic -y \
+    && fc-cache -f 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY package.json /usr/src/app/
