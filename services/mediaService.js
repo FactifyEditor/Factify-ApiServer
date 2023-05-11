@@ -3,6 +3,7 @@ import model from './../models/index.js'
 const { mediaModel } = model;
 
 const getAllMedias = async (filter) => {
+  
   return await mediaModel.find(filter).populate('creator').populate('language');
 };
 const createMedia = async (media) => {

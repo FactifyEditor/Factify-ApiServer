@@ -17,7 +17,7 @@ const {
   } = mediaController
 
 const router = express.Router();
-router.route("/").get(getAllMedias).post(tokenValidator.verifyToken,createMedia);
+router.route("/").get(tokenValidator.verifyToken,getAllMedias).post(tokenValidator.verifyToken,createMedia);
 router.route("/:id").get(getMediaById).put(updateMedia)
 router.delete("/", deleteMedia);
 router.post("/publish", publishMedia);

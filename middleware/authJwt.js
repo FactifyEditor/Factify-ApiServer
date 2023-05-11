@@ -16,6 +16,7 @@ const verifyToken = (req, res, next) => {
       return res.status(401).send({ message: err });
     }
     req.userId = decoded.id;
+    
     next();
   });
 };
