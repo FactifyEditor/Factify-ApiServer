@@ -16,7 +16,7 @@ RUN apt-get update \
 
 RUN apt update && apt install fonts-indic -y \
     && apt-get install fonts-noto  \
-    && apt-get install fonts-noto-cjk
+    && apt-get install fonts-noto-cjk \
     && fc-cache -f 
 
 RUN mkdir -p /usr/src/app
