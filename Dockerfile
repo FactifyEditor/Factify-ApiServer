@@ -12,8 +12,13 @@ RUN apt-get update \
     && apt-get install -y google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1 \
       --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
+
+
 RUN apt update && apt install fonts-indic -y \
+    && apt-get install fonts-noto  \
+    && apt-get install fonts-noto-cjk
     && fc-cache -f 
+
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY package.json /usr/src/app/
