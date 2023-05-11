@@ -13,13 +13,6 @@ RUN apt-get update \
       --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-
-RUN apt update && apt install fonts-indic -y 
-RUN apt-get install fonts-noto -y
- RUN   apt-get install fonts-noto-cjk -y \
-    && fc-cache -f 
-RUN apt-get install python build-essential -y
-
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY package.json /usr/src/app/
