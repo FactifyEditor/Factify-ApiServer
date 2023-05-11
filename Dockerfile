@@ -12,9 +12,7 @@ RUN apt-get update \
     && apt-get install -y google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1 \
       --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
-RUN apk add --update python make g++\
-   && rm -rf /var/cache/apk/*
-
+RUN apt-get update && apt-get install -y python build-essential make g++
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY package.json /usr/src/app/
