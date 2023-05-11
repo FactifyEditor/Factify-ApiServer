@@ -4,6 +4,9 @@ import rssFeedHelper from '../utils/rssFeedHelper.js'
 import uploadHandler from "../utils/cloudHelper/gCloudHelper.js"
 import nodeHtmlToImage from 'node-html-to-image';
 import fileController from './file.controller.js'
+import font2base64 from 'node-font2base64'
+
+
 const { uploadBufferImage } = fileController;
 import axios from 'axios';
 const { uploadBufferAudio,uploadRSSXML } = uploadHandler;
@@ -135,6 +138,9 @@ const _renderAudio = async (req) => {
   // res.send({ data: req.body.audioUrl, status: "success" })
 }
 const renderImage = async (req, res) => {
+  
+  const _data = font2base64.encodeToDataUrlASync('./fonts/HindiFont.ttf');
+  req.body.fontUrl=_data;
   const image = await nodeHtmlToImage({
     html: req.body.html,
     content: req.body,
