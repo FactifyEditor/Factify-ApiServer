@@ -27,6 +27,7 @@ const getUserById = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
 const updateUser = async (req, res) => {
   try {
     const user = await userService.updateUser(req.params.id, req.body);
