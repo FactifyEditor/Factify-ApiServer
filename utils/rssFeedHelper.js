@@ -1,4 +1,4 @@
-const generateRSSFeed =  (feeds) => {
+const generateRSSFeed = (feeds) => {
     let items = feeds.map(feed => {
         return `<item>
                 <link>${feed.videoUrl}</link>
@@ -23,6 +23,32 @@ const generateRSSFeed =  (feeds) => {
     return rssFeed;
 };
 
+const generateRSSFeeds = (allPublishedFeed) => {
+    const rssFeeds = {};
+
+    allPublishedFeed.forEach(feed => {
+        const language = feed.language.value;
+
+        if (!rssFeeds[language]) {
+            rssFeeds[language] = '';
+        }
+
+        const rssFeedItem = `<item>
+      <link>${feed.videoUrl}</link>
+      <title>${feed.metaData?.claim?.frameText}</title>
+      <description>${feed.metaData?.rating?.frameText}</description>
+      <pubDate>${new Date(feed.publishedDate).toUTCString()}</pubDate>
+    </item>`;
+
+        rssFeeds[language] += rssFeedItem;
+    });
+
+    return rssFeeds;
+};
+
+
+
 export default {
-    generateRSSFeed
+    generateRSSFeed,
+    generateRSSFeeds
 }
