@@ -26,25 +26,49 @@ const generateRSSFeed = (feeds) => {
 const generateRSSFeeds = (allPublishedFeed) => {
     const rssFeeds = {};
 
-    allPublishedFeed.forEach(feed => {
+    const rssType = ['video', 'audio', 'image'];
+
+    rssType.forEach((type) => {
+        rssFeeds[type] = {}; // Initialize as an object for each type
+    });
+
+    allPublishedFeed.forEach((feed) => {
         const language = feed.language.value;
 
         if (!rssFeeds[language]) {
-            rssFeeds[language] = '';
+            rssFeeds[language] = {};
+            rssType.forEach((type) => {
+                rssFeeds[language][type] = ''; // Initialize as an empty string for each type
+            });
         }
 
-        const rssFeedItem = `<item>
+        const rssFeedItemAudio = `<item>
+      <link>${feed.audioUrl}</link>
+      <title>${feed.metaData?.claim?.frameText}</title>
+      <description>${feed.metaData?.rating?.frameText}</description>
+      <pubDate>${new Date(feed.publishedDate).toUTCString()}</pubDate>
+      </item>`;
+        const rssFeedItemVideo = `<item>
       <link>${feed.videoUrl}</link>
       <title>${feed.metaData?.claim?.frameText}</title>
       <description>${feed.metaData?.rating?.frameText}</description>
       <pubDate>${new Date(feed.publishedDate).toUTCString()}</pubDate>
-    </item>`;
+      </item>`;
+        const rssFeedItemImage = `<item>
+      <link>${feed.imageUrl}</link>
+      <title>${feed.metaData?.claim?.frameText}</title>
+      <description>${feed.metaData?.rating?.frameText}</description>
+      <pubDate>${new Date(feed.publishedDate).toUTCString()}</pubDate>
+      </item>`;
 
-        rssFeeds[language] += rssFeedItem;
+        rssFeeds[language]['audio'] += rssFeedItemAudio;
+        rssFeeds[language]['video'] += rssFeedItemVideo;
+        rssFeeds[language]['image'] += rssFeedItemImage;
     });
 
     return rssFeeds;
 };
+
 
 
 

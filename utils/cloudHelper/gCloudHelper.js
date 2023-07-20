@@ -63,36 +63,71 @@ const uploadRSSXML = async(rss) => {
         return err
     }
 };
+// const uploadRSSFeeds = async(rssFeeds) => {
+//     const uploadedURLs = {};
+
+//     for (const language in rssFeeds) {
+//         const rssFeed = `<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+//       <channel>
+//         <title>Factify</title>
+//         <link>https://storage.googleapis.com/factify/rssfeed.xml</link>
+//         <description>Factify RSS Feed</description>
+//         <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+//         <language>${language}</language>
+//         <managingEditor>test@test.com (editors)</managingEditor>
+//         ${rssFeeds[language]}
+//       </channel>
+//     </rss>`;
+
+//         try {
+//             const fileName = `rssfeed_${language}.xml`;
+//             const manifestFile = fileBucket.file(fileName);
+//             await manifestFile.save(rssFeed);
+//             const url = `https://storage.googleapis.com/${fileBucket.name}/${fileName}`;
+//             uploadedURLs[language] = url;
+//         } catch (err) {
+//             console.log(`Error uploading RSS feed for ${language}:`, err);
+//             uploadedURLs[language] = null;
+//         }
+//     }
+
+//     return uploadedURLs;
+// };
 const uploadRSSFeeds = async(rssFeeds) => {
     const uploadedURLs = {};
 
     for (const language in rssFeeds) {
-        const rssFeed = `<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-      <channel>
-        <title>Factify</title>
-        <link>https://storage.googleapis.com/factify/rssfeed.xml</link>
-        <description>Factify RSS Feed</description>
-        <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
-        <language>${language}</language>
-        <managingEditor>test@test.com (editors)</managingEditor>
-        ${rssFeeds[language]}
-      </channel>
-    </rss>`;
+        const feedTypes = ['audio', 'video', 'image'];
 
-        try {
-            const fileName = `rssfeed_${language}.xml`;
-            const manifestFile = fileBucket.file(fileName);
-            await manifestFile.save(rssFeed);
-            const url = `https://storage.googleapis.com/${fileBucket.name}/${fileName}`;
-            uploadedURLs[language] = url;
-        } catch (err) {
-            console.log(`Error uploading RSS feed for ${language}:`, err);
-            uploadedURLs[language] = null;
+        for (const feedType of feedTypes) {
+            const rssFeed = `<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+          <channel>
+            <title>Factify</title>
+            <link>https://storage.googleapis.com/factify/rssfeed_${language}_${feedType}.xml</link>
+            <description>Factify ${feedType.toUpperCase()} RSS Feed (${language})</description>
+            <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+            <language>${language}</language>
+            <managingEditor>test@test.com (editors)</managingEditor>
+            ${rssFeeds[language][feedType]}
+          </channel>
+        </rss>`;
+
+            try {
+                const fileName = `rssfeed_${language}_${feedType}.xml`;
+                const manifestFile = fileBucket.file(fileName);
+                await manifestFile.save(rssFeed);
+                const url = `https://storage.googleapis.com/${fileBucket.name}/${fileName}`;
+                uploadedURLs[`${language}_${feedType}`] = url;
+            } catch (err) {
+                console.log(`Error uploading ${feedType} RSS feed for ${language}:`, err);
+                uploadedURLs[`${language}_${feedType}`] = null;
+            }
         }
     }
 
     return uploadedURLs;
 };
+
 
 
 export default { uploadBufferAudio, uploadRSSXML, uploadRSSFeeds }
