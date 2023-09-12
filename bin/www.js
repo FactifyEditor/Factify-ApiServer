@@ -3,7 +3,7 @@
  import debugLib from 'debug';
  import http from 'http';
 
-var debug = debugLib('myapp:server');
+ var debug = debugLib('myapp:server');
 
 /**
  * Get port from environment and store in Express.
